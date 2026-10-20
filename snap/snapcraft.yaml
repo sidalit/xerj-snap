@@ -1,0 +1,79 @@
+name: xerj
+base: core26
+adopt-info: xerj
+title: XERJ
+summary: Local search engine and MCP server for code, documents and AI agents
+description: |
+  XERJ indexes code, documents and logs with full-text, vector and hybrid
+  search. The xerj command includes an Elasticsearch-compatible server,
+  folder indexing, a web console and an MCP stdio server.
+
+  **Examples**
+
+     xerj --data-dir ~/xerj-data
+     xerj autoindex ~/my-project
+     xerj mcp
+
+  **File access**
+
+  XERJ can use files in your home directory. To also use USB drives and
+  other removable media (/media, /mnt), run:
+
+     sudo snap connect xerj:removable-media
+license: Apache-2.0
+grade: stable
+confinement: strict
+website: https://xerj.org
+source-code: https://github.com/xerj-org/xerj
+issues: https://github.com/xerj-org/xerj/issues
+contact: https://github.com/sidalit/xerj-snap/issues
+
+platforms:
+  amd64:
+  arm64:
+
+apps:
+  xerj:
+    command: bin/xerj
+    plugs:
+      - home
+      - network
+      - network-bind
+      - removable-media
+    environment:
+      HOME: $SNAP_USER_COMMON
+      GIT_EXEC_PATH: $SNAP/usr/lib/git-core
+      GIT_TEMPLATE_DIR: $SNAP/usr/share/git-core/templates
+
+parts:
+  xerj:
+    plugin: rust
+    source: https://github.com/xerj-org/xerj.git
+    # renovate: depName=xerj-org/xerj
+    source-tag: 'v1.0.0-rc.97'
+    source-subdir: engine
+    rust-channel: '1.99.1'
+    rust-path:
+      - crates/xerj-server
+    build-packages:
+      - build-essential
+      - pkg-config
+      - libssl-dev
+      - python3
+    stage-packages:
+      - git
+      - libssl3t64
+      - libstdc++6
+    build-environment:
+      - OPENSSL_NO_VENDOR: '1'
+    override-pull: |
+      craftctl default
+      version=$(python3 -c 'import os, pathlib, tomllib; print(tomllib.loads((pathlib.Path(os.environ["CRAFT_PART_SRC"]) / "engine/Cargo.toml").read_text())["workspace"]["package"]["version"])')
+      craftctl set version="$version"
+    override-build: |
+      # Match upstream's ARM64 allocator support for 4, 16 and 64 KiB kernels.
+      if [ "$CRAFT_ARCH_BUILD_FOR" = arm64 ]; then
+        export JEMALLOC_SYS_WITH_LG_PAGE=16
+      fi
+      craftctl default
+      install -Dm644 "$CRAFT_PART_SRC/LICENSE" "$CRAFT_PART_INSTALL/share/doc/xerj/LICENSE"
