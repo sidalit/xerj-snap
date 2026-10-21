@@ -1,6 +1,6 @@
 name: xerj
 base: core26
-adopt-info: xerj
+version: '1.0.0-rc.97'
 title: XERJ
 summary: Local search engine and MCP server for code, documents and AI agents
 description: |
@@ -49,8 +49,7 @@ parts:
   xerj:
     plugin: rust
     source: https://github.com/xerj-org/xerj.git
-    # renovate: depName=xerj-org/xerj
-    source-tag: 'v1.0.0-rc.97'
+    source-tag: v$SNAPCRAFT_PROJECT_VERSION
     source-subdir: engine
     rust-channel: '1.99.1'
     rust-path:
@@ -66,10 +65,6 @@ parts:
       - libstdc++6
     build-environment:
       - OPENSSL_NO_VENDOR: '1'
-    override-pull: |
-      craftctl default
-      version=$(python3 -c 'import os, pathlib, tomllib; print(tomllib.loads((pathlib.Path(os.environ["CRAFT_PART_SRC"]) / "engine/Cargo.toml").read_text())["workspace"]["package"]["version"])')
-      craftctl set version="$version"
     override-build: |
       # Match upstream's ARM64 allocator support for 4, 16 and 64 KiB kernels.
       if [ "$CRAFT_ARCH_BUILD_FOR" = arm64 ]; then
