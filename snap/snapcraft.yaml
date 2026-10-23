@@ -24,8 +24,12 @@ license: Apache-2.0
 grade: stable
 confinement: strict
 website: https://xerj.org
-source-code: https://github.com/xerj-org/xerj
-issues: https://github.com/xerj-org/xerj/issues
+source-code:
+  - https://github.com/xerj-org/xerj
+  - https://github.com/sidalit/xerj-snap
+issues:
+  - https://github.com/xerj-org/xerj/issues
+  - https://github.com/sidalit/xerj-snap/issues
 contact: https://github.com/sidalit/xerj-snap/issues
 
 platforms:
