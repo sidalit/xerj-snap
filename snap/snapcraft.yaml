@@ -1,6 +1,6 @@
 name: xerj
 base: core26
-version: '1.0.0-rc.97'
+version: '1.0.0-rc.98'
 title: XERJ
 summary: Local search engine and MCP server for code, documents and AI agents
 description: |
