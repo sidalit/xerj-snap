@@ -2,6 +2,7 @@ name: xerj
 base: core26
 version: '1.0.0-rc.97'
 title: XERJ
+icon: snap/gui/xerj.png
 summary: Local search engine and MCP server for code, documents and AI agents
 description: |
   XERJ indexes code, documents and logs with full-text, vector and hybrid
