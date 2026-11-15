@@ -58,7 +58,7 @@ parts:
     source: https://github.com/xerj-org/xerj.git
     source-tag: v$SNAPCRAFT_PROJECT_VERSION
     source-subdir: engine
-    rust-channel: '1.99.1'
+    rust-channel: stable
     rust-path:
       - crates/xerj-server
     build-packages:
